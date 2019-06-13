@@ -51,10 +51,10 @@ Hx.symmetrize(sym);
 Hz=OperatorClass(N_atom,'z',1);
 Hz.symmetrize(sym);
 col=1;
-for p=1:length(glist)
+parfor p=1:length(glist)
     g=glist(p);
-%     H=H_int+g*Hz;
-    H=U2H(H2U(0.25*H_int,3/180*pi)*H2U(0.5*Hz,3/180*pi),1);
+    H=H_int+g*Hz;
+%     H=U2H(H2U(0.25*H_int,3/180*pi)*H2U(0.5*Hz,3/180*pi),1);
     C(:,p)=TPC(rho_0,H,V0,tlist);
 %     C(:,p)=OTOC(rho_0,H,V0,tlist);
 %     C(:,p)=BiEETlist(rho_0,H,tlist,5);
