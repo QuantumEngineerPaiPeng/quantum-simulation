@@ -1,0 +1,56 @@
+%20170912
+%simulate time crystal dynamics [pi exp(iHt)]^n
+N_atom=8;
+Sigma_i=IndivPauli(N_atom);
+Sigma_x=sum(cat(3,Sigma_i{1}{:}),3);
+Sigma_y=sum(cat(3,Sigma_i{2}{:}),3);
+Sigma_z=sum(cat(3,Sigma_i{3}{:}),3);
+
+J=1;
+g=0.;
+
+tau=0.16;
+epsilon=0.05;
+N=20;
+rho_0=Sigma_z;
+
+H_int=zeros(2^N_atom);
+for p=1:N_atom-1
+    H_int=H_int+(-1)*...
+        J*(Sigma_i{1}{p}*Sigma_i{1}{p+1}-...
+        (Sigma_i{3}{p}*Sigma_i{3}{p+1}+Sigma_i{2}{p}*Sigma_i{2}{p+1})/2);
+%     H_int=H_int+...
+%         J*(Sigma_i{1}{p}*Sigma_i{1}{p+1});
+% H_int=H_int+...
+%         J*(Sigma_i{2}{p}*Sigma_i{2}{p+1}+Sigma_i{3}{p}*Sigma_i{3}{p+1}+Sigma_i{1}{p}*Sigma_i{1}{p+1});
+end
+
+
+
+H=H_int+H_trans;
+
+U_H=exp(1)^(-1i*H*tau);
+U=U_H;
+
+t=0:N-1;
+t=t*tau;
+rhot=cell(1,N);
+rhot{1}=rho_0;
+M_y=zeros(1,N);
+M_x=zeros(1,N);
+M_z=zeros(1,N);
+
+for p=1:N
+%     M_y(p)=trace(rhot{p}*Sigma_y/(N_atom*2^N_atom));
+    M_x(p)=trace(rhot{p}*Sigma_x/(N_atom*2^N_atom));
+    M_z(p)=trace(rhot{p}*Sigma_z/(N_atom*2^N_atom));
+    rhot{p+1}=U*rhot{p}*U^(-1);
+end
+
+% F=abs(fft(real(M_y)));
+
+figure(1)
+hold on
+plot(t,M_z)
+% figure(2)
+% plot((0:N-1)/N/tau,F)
