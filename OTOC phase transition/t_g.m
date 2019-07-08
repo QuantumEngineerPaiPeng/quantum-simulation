@@ -11,7 +11,7 @@ cplist=[1,2,3].^-3;
 % cplist=1;
 % cplist=(1:N_atom-1).^-3;
 % model='Ising';
-model=[1,-1,0]*0+[-0.5,1,-0.5];
+model=[1,-1,0]*0+[-0.5,-0.5,1];
 % sym='kpz';
 sym='kp';
 % sym=[];
@@ -20,11 +20,11 @@ sym='kp';
 tlist=0:1:320;
 % glist=linspace(2,10,5); % strength of the transverse field
 % glist=[3];
-glist=[2];
+glist=[0];
 % glist=logspace(-1,2,10);
 theta=0/180*pi;
 
-rho_0=OperatorClass(N_atom,'z',1)*cos(theta)+OperatorClass(N_atom,'x',1)*sin(theta);
+rho_0=OperatorClass(N_atom,'dipolar',-1,bc,cplist,2);
 % rho_0.matrix={zeros(2^N_atom,2^N_atom)};
 % dir1=[90,0];
 % dir2=[90,90];
@@ -51,7 +51,7 @@ Hx.symmetrize(sym);
 Hz=OperatorClass(N_atom,'z',1);
 Hz.symmetrize(sym);
 col=1;
-parfor p=1:length(glist)
+for p=1:length(glist)
     g=glist(p);
     H=H_int+g*Hz;
 %     H=U2H(H2U(0.25*H_int,3/180*pi)*H2U(0.5*Hz,3/180*pi),1);
@@ -66,7 +66,7 @@ end
 % 
 % stdev=std(C,1)/sqrt(length(tlist));
 figure(1)
-plot(tlist/10,real(C)/real(C(1)))
+plot(tlist,real(C)/real(C(1)))
 hold on
 % xlabel('g')
 ppStyle(30,2,10)

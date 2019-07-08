@@ -3,7 +3,7 @@
 % Input: 
 % L: system size
 % n: Pauli on nth site being
-% tag: 'x', 'y' or 'z' giving the Pauli operator
+% tag: 'x', 'y' 'z' '+' or '-' giving the Pauli operator
 % Created by Pai Peng
 function y=LocalPauli(L,n,tag)
 switch tag
@@ -13,8 +13,12 @@ switch tag
         pauli=sparse(sigma_y);
     case 'z'
         pauli=sparse(sigma_z);
+    case '-'
+        pauli=sparse([0,1;0,0]);
+    case '+'
+        pauli=sparse([0,0;1,0]);
     otherwise
-        error('3rd input must be ''x'', ''y'' or ''z''')
+        error('3rd input must be ''x'', ''y'' ''z'' ''+'' or ''-''')
 end
 
 y=OperatorClass(L);

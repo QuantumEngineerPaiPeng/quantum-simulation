@@ -2,7 +2,7 @@
 %ED full spectrum by diagonalazation in each sector
 %using symmetries to speed up
 tic
-N_atom=12;
+N_atom=10;
 % glist=logspace(-2,0,5);
 glist=linspace(0.01,10,100);
 bc='p';
@@ -20,7 +20,7 @@ cplist=[1,1/8,1/27];
 
 D=cell(2,length(glist));
 
-H_int=-Hamiltonian(N_atom,bc,cplist,'dq');
+H_int=-Hamiltonian(N_atom,bc,cplist,'Ising',1);
 
 piz=PiPulse(N_atom,3);
 seclist=[find(diag(piz)==1),find(diag(piz)==-1)];
