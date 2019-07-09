@@ -88,6 +88,7 @@ class XyEnv(gym.Env):
 
         
     def set_pulse(self):
+        self.unitary_id = np.dot(expm(-1j*self.H0*(1-self.pw)),expm(-1j*(self.H0*self.pw-np.pi/2/2*self.H_pulse_nSpin(0))))
         self.unitary_x = np.dot(expm(-1j*self.H0*(1-self.pw)),expm(-1j*(self.H0*self.pw-np.pi/2/2*self.H_pulse_nSpin(1))))
         self.unitary_y = np.dot(expm(-1j*self.H0*(1-self.pw)),expm(-1j*(self.H0*self.pw-np.pi/2/2*self.H_pulse_nSpin(2))))
         self.unitary_xbar = np.dot(expm(-1j*self.H0*(1-self.pw)),expm(-1j*(self.H0*self.pw-np.pi/2/2*self.H_pulse_nSpin(3))))
@@ -296,7 +297,7 @@ class XyEnv(gym.Env):
     def unitary_pulse_nSpin(self, index):
         n=index
         if n==0:
-            temp=np.eye(2**self.nSpin)
+            temp=self.unitary_id
         elif n==1:
             temp=self.unitary_x
         elif n==2:
